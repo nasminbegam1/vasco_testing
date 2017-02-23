@@ -1,0 +1,195 @@
+@extends('app')
+
+@section('title', 'Patient Registration')
+    
+@section('content')
+	<h2>Patient Registration</h2>
+		@if (count($errors) > 0) 
+                    <div class="alert alert-danger">
+                    <ul>
+                            @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                            @endforeach
+                    </ul>
+                    </div>
+		@endif
+		@if(Session::has('success'))
+			<div class="alert alert-success">
+				<ul>
+					<li>{{Session::get('success') }}</li>
+				</ul>
+			</div>
+		@endif
+		<h3 class="heading">Patient Information</h3>			
+            <div class="clearfix patientinfo">
+	    {!! Form::open(array('route'=>'user_signup_action','id' => 'userSignup','novalidate'=>'novalidate')) !!}
+	    
+            <div class="form-group">
+               <label for="name">First Name</label>
+               {!! Form::text('first_name',null,array('placeholder'=>'First Name','class'=>'form-control','required'=>'required')) !!}
+            </div>
+		   <div class="form-group">
+               <label for="name">Last Name</label>
+               {!! Form::text('last_name',null,array('placeholder'=>'Last Name','class'=>'form-control','required'=>'required')) !!}
+            </div>	
+            <div class="form-group">
+              <label for="email">Email address</label>
+              {!! Form::email('email',null,array('placeholder'=>'Email address','class'=>'form-control','required'=>'required')) !!}
+            </div>
+	    <div class="form-group">
+              <label for="pwd">Password</label>
+              {!! Form::password('password',array('placeholder'=>'Password','class'=>'form-control','id'=>'password','required'=>'required')) !!}
+            </div>
+	    <div class="form-group">
+              <label for="pwd">Re-enter Password</label>
+              {!! Form::password('re_password',array('placeholder'=>'Password','class'=>'form-control','required'=>'required')) !!}
+            </div>
+	    <div class="form-group">
+              <label for="dob">Patient Date Of Birth</label>
+		{{--*/ $year = date('Y') /*--}}
+	      {!! Form::selectRange('date','1','31',date('j')) !!}
+              {!! Form::selectMonth('month',date('m')) !!}
+	      {!! Form::selectYear('year', $year - 100, $year,date('Y')) !!}
+            </div>
+	    <div class="form-group">
+              <label for="gender">Patient Gender</label>
+              {!! Form::select('gender',[''=>'Select Gender','Male'=>'Male','Female'=>'Female'],'',array('class'=>'form-control')) !!}
+            </div>	
+	    <div class="form-group">
+              <label for="address">Address</label>
+              {!! Form::text('address',null,array('placeholder'=>'Address','class'=>'form-control homeAddress')) !!}
+            </div>
+	    <div class="form-group">
+              <label for="state">State</label>
+              {!! Form::select('state',$state,'',array('class'=>'form-control homeState select_state')) !!}
+            </div>
+	    <div class="form-group">
+              <label for="state">City</label>
+              {!! Form::select('city',[''=>'Select city'],'',array('class'=>'form-control homeCity get_city')) !!}
+            </div>
+            <div class="form-group">
+              <label for="state">Zip</label>
+              {!! Form::text('zip',null,array('placeholder'=>'Zip','class'=>'form-control homeZip')) !!}
+            </div>		
+	   <div class="form-group">
+              <label for="phone_home">Phone (Home)</label>
+              {!! Form::text('phone_home',null,array('placeholder'=>'Home Phone No.','class'=>'form-control')) !!}
+            </div>
+            <div class="form-group">
+              <label for="phone_mobile">Phone (Cell)</label>
+              {!! Form::text('phone_mobile',null,array('placeholder'=>'Mobile No.','class'=>'form-control')) !!}
+            </div>	
+	    <div class="form-group">
+              <label for="is_minor">Is this patient a minor?</label>
+              {!! Form::select('is_minor',[''=>'Choose your selection...','Yes'=>'Yes','No'=>'No'],'',array('class'=>'form-control is_minor')) !!}
+            </div>
+	    <div class="form-group contact_name" style="display:none;">
+               <label for="contact_name">Contact Name</label>
+               {!! Form::text('contact_name',null,array('placeholder'=>'Contact Name','class'=>'form-control')) !!}
+            </div>	
+	    <div class="form-group padding-left">
+              <label for="is_pet">Is this a pet?</label>
+              {!! Form::select('is_pet',[''=>'Choose your selection...','Yes'=>'Yes','No'=>'No'],'',array('class'=>'form-control is_pet')) !!}
+            </div>
+	    <div class="form-group pet_type_view" style="display:none;">
+              <label for="pet_type">Pet Type</label>
+              {!! Form::select('pet_type',['Canine'=>'Canine','Feline'=>'Feline','Other'=>'Other'],'',array('class'=>'form-control pet_type')) !!}
+            </div>
+	    <div class="form-group pet_type_value" style="display:none;">
+              <label for="pet_type">Pet Type</label>
+              {!! Form::text('pet_type_value','',array('class'=>'form-control','placeholder' => 'Enter Pet Type')) !!}
+            </div>
+</div>		
+		
+		
+		<h3 class="heading">Billing Information
+				   <label><input type="checkbox" value="Yes" name="copyAddress" class="copyAddressInSignup" > Same as above</label>
+				  </h3>
+		<div class="clearfix billinginfo">				    
+		  
+		  
+		  <div class="form-group">
+			<label for="billing_address">Address</label>
+			{!! Form::text('billing_address', '', array('placeholder'=>'Billing Address','class'=>'form-control billingAddress')) !!}
+		  </div>
+		  
+		  <div class="form-group">
+			<label for="billing_state">State</label>
+			{!! Form::select('billing_state',$state, '', array('class'=>'form-control billingState')) !!}				      
+		  </div>
+			  
+		  <div class="form-group">
+			<label for="billing_city">City</label>
+			{!! Form::select('billing_city', array(''=> 'Select City'),'',array('class'=>'form-control billingCity')) !!}
+		  </div>
+			  
+		   <div class="form-group">
+			<label for="billing_zip">Zip</label>
+			
+			{!! Form::text('billing_zip', '',array('placeholder'=>'Billing Zip','class'=>'form-control billingZip')) !!}
+		  </div>
+		  
+		  
+		  <div class="form-group">
+			 <label for="first_name">Credit Card Number</label>
+		  {!! Form::text('credit_card','',array('placeholder'=>'Credit Card Number','class'=>'form-control')) !!}
+		  </div>
+			  
+		  <div class="form-group">
+		  <label for="last_name">Expiry Date</label>
+		  {!! Form::selectMonth('exp_month','') !!}
+			{!! Form::selectYear('exp_year',  date('Y') + 20, date('Y'),date('Y')) !!}
+		  </div>
+			  
+		  <div class="form-group">
+		  <label for="last_name">CVV</label>
+		  {!! Form::text('cvv','', array('placeholder'=>'CVV','class'=>'form-control')) !!}
+		  </div>
+		</div>
+						
+		
+	    <h3 class="heading">Emergency Contact Information</h3>
+		
+		<div class="clearfix billinginfo">	
+		
+		<div class="form-group">
+		  <label for="emergency_contact_name">Name</label>
+		  {!! Form::text('emergency_contact_name',null,array('placeholder'=>'Name','class'=>'form-control')) !!}
+		</div>
+		<div class="form-group">
+		  <label for="emergency_contact_number">Phone Number</label>
+		  {!! Form::text('emergency_contact_number',null,array('placeholder'=>'Emergency Contact Number','class'=>'form-control')) !!}
+		</div>
+		<div class="form-group">
+		  <label for="relationship">Relationship to Patient</label>
+		  {!! Form::text('relationship',null,array('placeholder'=>'Relationship to Patient','class'=>'form-control')) !!}
+		</div>
+	      </div>
+            {!! Form::submit('Submit',array('class'=>'btn btn-default signup2')) !!}
+            {!! Form::close() !!}
+	    
+	    
+	    <script>
+				$(function(){
+				
+				$('.copyAddressInSignup').on('click',function(){
+				
+						if ($(this).is(':checked')) {
+							$('.billingAddress').val($('.homeAddress').val());
+							$(".billingState").find('option').removeAttr("selected");
+							var selected_val = $('.homeState').val();
+							$('.billingState option[value='+selected_val+']').prop('selected',true);
+							var cityid = $('.homeCity').val();
+							SelectedCity(selected_val,cityid);
+							$('.billingZip').val($('.homeZip').val());
+						}else{
+							$('.billingAddress').val('');
+							$('.billingState').val('');
+							$('.billingCity').val('');
+							$('.billingZip').val('');
+						}
+						});
+				})
+		</script>
+	    	
+@endsection
